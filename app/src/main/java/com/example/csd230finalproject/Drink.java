@@ -1,12 +1,13 @@
 package com.example.csd230finalproject;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
 
 
 
-public class Drink {
+public class Drink implements Serializable {
     private int idDrink;
     private String strDrink;
     private String strDrinkAlternative;

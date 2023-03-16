@@ -2,9 +2,10 @@ package com.example.csd230finalproject;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DrinkList {
+public class DrinkList implements Serializable {
     public DrinkList(){
 
     }
