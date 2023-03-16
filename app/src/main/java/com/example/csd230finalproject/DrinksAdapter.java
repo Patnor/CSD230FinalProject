@@ -26,11 +26,17 @@ public class DrinksAdapter extends RecyclerView.Adapter<DrinksAdapter.DrinksView
         public TextView textDrinkName;
         public TextView textId;
 
+        public ImageView cardImage;
+        public TextView cardTitle;
+
         public DrinksViewHolder(@NonNull View itemView) {
             super(itemView);
             drinkImage = itemView.findViewById(R.id.imageDrink);
             textDrinkName = itemView.findViewById(R.id.tvTitle);
             textId = itemView.findViewById(R.id.tvId);
+
+            cardImage = itemView.findViewById(R.id.cardImage);
+            cardTitle = itemView.findViewById(R.id.card_title);
         }
     }
 
@@ -46,7 +52,7 @@ public class DrinksAdapter extends RecyclerView.Adapter<DrinksAdapter.DrinksView
     @NonNull
     @Override
     public DrinksAdapter.DrinksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View drinkItemView = inflater.inflate(R.layout.layout_drink, parent, false);
+        View drinkItemView = inflater.inflate(R.layout.card_item, parent, false);
 
         return new DrinksViewHolder(drinkItemView);
     }
@@ -71,10 +77,15 @@ public class DrinksAdapter extends RecyclerView.Adapter<DrinksAdapter.DrinksView
        // holder.drinkImage.setImageBitmap(bmp);
         //holder.drinkImage.setImageURI(imageUri);
 
-        Picasso.get().load(data.get(position).getStrDrinkThumb()).into(holder.drinkImage);
+    /*    Picasso.get().load(data.get(position).getStrDrinkThumb()).into(holder.drinkImage);
         //holder.drinkImage.setImageResource(R.drawable.drink_example_image);
         holder.textDrinkName.setText(data.get(position).getStrDrink());
         holder.textId.setText(String.valueOf(data.get(position).getIdDrink()));
+*/
+        Picasso.get().load(data.get(position).getStrDrinkThumb()).into(holder.cardImage);
+        //holder.drinkImage.setImageResource(R.drawable.drink_example_image);
+        holder.cardTitle.setText(data.get(position).getStrDrink());
+       // holder.textId.setText(String.valueOf(data.get(position).getIdDrink()));
     }
 
     @Override
