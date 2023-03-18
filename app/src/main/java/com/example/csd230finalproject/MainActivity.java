@@ -69,15 +69,29 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+
+/*        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, ProfileFragment.newInstance(profile))
+                .addToBackStack(null)
+                .commit();*/
+
     }
 
     private void setData(ArrayList<Drink> data){
         Drink nextDrink = alDrinks.get(2);
         Log.d("outside Drink nextDrink", nextDrink.getStrDrink());
 
-        adapter = new DrinksAdapter(this, alDrinks);
-        binding.rvDrinks.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvDrinks.setAdapter(adapter);
+       // adapter = new DrinksAdapter(this, alDrinks);
+      //  binding.rvDrinks.setLayoutManager(new LinearLayoutManager(this));
+       // binding.rvDrinks.setAdapter(adapter);
+
+        getSupportFragmentManager().beginTransaction()
+
+                .add(R.id.rootView, MainFragment.newInstance(alDrinks))
+                .commit();
 
     }
 
