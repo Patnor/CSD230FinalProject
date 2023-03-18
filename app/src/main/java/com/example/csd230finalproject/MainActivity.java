@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
     ArrayList<Drink> alDrinks;
-    private DrinksAdapter adapter;
-    private RecyclerView recycle;
+/*    private DrinksAdapter adapter;
+    private RecyclerView recycle;*/
 
 
     @Override
