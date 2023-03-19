@@ -1,5 +1,6 @@
 package com.example.csd230finalproject;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,11 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.csd230finalproject.databinding.FragmentMainBinding;
 
 import java.util.ArrayList;
-
 
 public class MainFragment extends Fragment {
 
@@ -27,6 +29,8 @@ public class MainFragment extends Fragment {
 
     private DrinksAdapter adapter;
     private RecyclerView recycle;
+
+    private String drinkId;
 
 
     public MainFragment() {
@@ -64,16 +68,10 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Cocktails");
 
-        Log.d("Drink" , mDrinks.get(0).getStrDrink());
+        //Log.d("Drink" , mDrinks.get(0).getStrDrink());
 
         adapter = new DrinksAdapter(getContext(), mDrinks);
         binding.rvDrinks.setLayoutManager(new LinearLayoutManager(getContext()));
          binding.rvDrinks.setAdapter(adapter);
-
- /*       binding.textViewName.setText(mProfile.name);
-        binding.textViewEmail.setText(mProfile.email);
-        binding.textViewId.setText(mProfile.id);
-        binding.textViewDept.setText(mProfile.department);*/
-
     }
 }

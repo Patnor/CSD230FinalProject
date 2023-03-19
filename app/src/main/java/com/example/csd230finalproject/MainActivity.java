@@ -1,17 +1,22 @@
 package com.example.csd230finalproject;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,12 +35,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-
     ActivityMainBinding binding;
     ArrayList<Drink> alDrinks;
-/*    private DrinksAdapter adapter;
-    private RecyclerView recycle;*/
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,29 +71,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-/*        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.rootView, ProfileFragment.newInstance(profile))
-                .addToBackStack(null)
-                .commit();*/
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("custom-message"));
 
     }
+
+
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String id = intent.getStringExtra("id");
+            Log.d("Drink messenger", id);
+
+            getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.rootView, DetailFragment.newInstance(id))
+                    .commit();
+
+        }
+    };
 
     private void setData(ArrayList<Drink> data){
         Drink nextDrink = alDrinks.get(2);
         Log.d("outside Drink nextDrink", nextDrink.getStrDrink());
 
-       // adapter = new DrinksAdapter(this, alDrinks);
-      //  binding.rvDrinks.setLayoutManager(new LinearLayoutManager(this));
-       // binding.rvDrinks.setAdapter(adapter);
-
         getSupportFragmentManager().beginTransaction()
 
                 .add(R.id.rootView, MainFragment.newInstance(alDrinks))
                 .commit();
-
     }
 
     @Override
