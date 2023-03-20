@@ -1,10 +1,10 @@
 package com.example.csd230finalproject;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
-
-
-
+import java.util.List;
 
 
 public class Drink implements Serializable {
@@ -13,6 +13,7 @@ public class Drink implements Serializable {
     private String strDrinkAlternative;
     private String strTags;
     private String strVideo;
+    private String strCategory;
     private String strIBA;
     private String strAlcoholic;
     private String strGlass;
@@ -57,7 +58,7 @@ public class Drink implements Serializable {
     private String strImageSource;
     private String strImageAttribution;
     private String strCreativeCommonsConfirmed;
-    private Date dateModified;
+    private String dateModified;
 
     public int getIdDrink() {
         return idDrink;
@@ -95,9 +96,16 @@ public class Drink implements Serializable {
         return strVideo;
     }
 
+    public String getStrCategory(){return strCategory;
+    }
+
     public void setStrVideo(String strVideo) {
         this.strVideo = strVideo;
     }
+    public void setStrCategory(String strCategory) {
+        this.strCategory = strCategory;
+    }
+
 
     public String getStrIBA() {
         return strIBA;
@@ -451,13 +459,14 @@ public class Drink implements Serializable {
         this.strCreativeCommonsConfirmed = strCreativeCommonsConfirmed;
     }
 
-    public Date getDateModified() {
+    public String getDateModified() {
         return dateModified;
     }
 
-    public void setDateModified(Date dateModified) {
+    public void setDateModified(String dateModified) {
         this.dateModified = dateModified;
     }
+
 
     public Drink() {
     }

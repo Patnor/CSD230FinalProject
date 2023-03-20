@@ -25,6 +25,7 @@ import com.example.csd230finalproject.databinding.ActivityMainBinding;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     ArrayList<Drink> alDrinks;
+    ArrayList<Drink> oneDrink;
+    Drink mDrink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +61,19 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<DrinkList>() {
             @Override
             public void onResponse(Call<DrinkList> call, Response<DrinkList> response) {
+
+                //Log.d("drink", "on response");
                 DrinkList myList = response.body();
                 List<Drink> drinks = myList.getMyDrinks();
                 alDrinks = new ArrayList<>(drinks.size());
                 alDrinks.addAll(drinks);
                 setData(alDrinks);
+
             }
 
             @Override
             public void onFailure(Call<DrinkList> call, Throwable t) {
-
+                Log.d("Drink ", "In on failure");
             }
         });
 
@@ -84,20 +90,65 @@ public class MainActivity extends AppCompatActivity {
             String id = intent.getStringExtra("id");
             Log.d("Drink messenger", id);
 
-            getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.rootView, DetailFragment.newInstance(id))
-                    .commit();
+            getDrinkFromApi(id);
 
         }
     };
 
-    private void setData(ArrayList<Drink> data){
-        Drink nextDrink = alDrinks.get(2);
-        Log.d("outside Drink nextDrink", nextDrink.getStrDrink());
+    private void getDrinkFromApi(String id){
+        //
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://www.thecocktaildb.com/api/json/v1/1/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        String url = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + id;
+        DrinksApi api = retrofit.create(DrinksApi.class);
+      // Call<DrinkList> call = api.getDrinkList();
+        Call<DrinkList> call = api.getNextDrink(url);
+
+        call.enqueue(new Callback<DrinkList>() {
+            @Override
+            public void onResponse(Call<DrinkList> call, Response<DrinkList> response) {
+
+                Log.d("drink", "on response Detail");
+                DrinkList myList = response.body();
+                List<Drink> drinks = myList.getMyDrinks();
+                oneDrink = new ArrayList<>(drinks.size());
+                oneDrink.addAll(drinks);
+               // setData(alDrinks);
+                setDetailData(oneDrink);
+
+            }
+
+            @Override
+            public void onFailure(Call<DrinkList> call, Throwable t) {
+                if(t instanceof IOException)
+                    Log.d("Drink on fail", "IoException");
+
+                Log.d("Drink on fail" , t.getMessage());
+                System.out.println("Network Error :: " + t.getLocalizedMessage());
+                 t.printStackTrace();
+            }
+        });
+
+
+    }
+    private void setDetailData(ArrayList<Drink> data){
+/*
+
+        Drink dr = new Drink();
+        dr.setIdDrink(Integer.parseInt(id));
+*/
+       Drink dr = data.get(0);
         getSupportFragmentManager().beginTransaction()
-
+                .addToBackStack(null)
+                .replace(R.id.rootView, DetailFragment.newInstance(dr))
+                .commit();
+    }
+    private void setData(ArrayList<Drink> data){
+        getSupportFragmentManager().beginTransaction()
                 .add(R.id.rootView, MainFragment.newInstance(alDrinks))
                 .commit();
     }

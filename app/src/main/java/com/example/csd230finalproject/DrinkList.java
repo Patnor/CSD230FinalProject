@@ -20,4 +20,18 @@ public class DrinkList implements Serializable {
     public void setMyDrinks(List<Drink> myDrinks) {
         this.myDrinks = myDrinks;
     }
+
+
+/*    @SerializedName("drinks")
+    private Drink myDrink;
+
+    public Drink getMyDrink() {
+        return myDrink;
+    }
+
+    public void setMyDrink(Drink myDrink) {
+        this.myDrink = myDrink;
+    }*/
+
+
 }

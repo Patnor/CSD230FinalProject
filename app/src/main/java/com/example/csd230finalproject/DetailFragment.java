@@ -22,7 +22,8 @@ public class DetailFragment extends Fragment {
 
 
     private String mDrinkId;
-
+    private Drink mDrink;
+    private int mId;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -30,10 +31,11 @@ public class DetailFragment extends Fragment {
 
 
 
-    public static DetailFragment newInstance(String drinkId) {
+    public static DetailFragment newInstance(Drink drink) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM_ID, drinkId);
+        //args.putString(ARG_PARAM_ID, drinkId);
+        args.putSerializable(ARG_PARAM_ID, drink);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,7 +44,7 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mDrinkId = getArguments().getString(ARG_PARAM_ID);
+            mDrink = (Drink) getArguments().getSerializable(ARG_PARAM_ID);
 
         }
     }
@@ -60,7 +62,7 @@ public class DetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Cocktail Details");
 
-        binding.cardTitle.setText(mDrinkId);
+        binding.cardTitle.setText(String.valueOf(mDrink.getStrDrink()));
     }
 
 }

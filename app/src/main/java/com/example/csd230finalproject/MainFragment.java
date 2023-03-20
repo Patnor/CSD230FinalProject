@@ -21,15 +21,11 @@ import com.example.csd230finalproject.databinding.FragmentMainBinding;
 import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
-
     FragmentMainBinding binding;
     private static final String ARG_PARAM_DRINK = "ARG_PARAM_DRINK";
-
     private ArrayList<Drink> mDrinks;
-
     private DrinksAdapter adapter;
     private RecyclerView recycle;
-
     private String drinkId;
 
 
@@ -59,7 +55,6 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(inflater, container, false);
-        // Inflate the layout for this fragment
         return binding.getRoot();
     }
 
@@ -67,8 +62,6 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Cocktails");
-
-        //Log.d("Drink" , mDrinks.get(0).getStrDrink());
 
         adapter = new DrinksAdapter(getContext(), mDrinks);
         binding.rvDrinks.setLayoutManager(new LinearLayoutManager(getContext()));
