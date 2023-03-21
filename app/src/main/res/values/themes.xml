@@ -26,4 +26,13 @@
 
     <style name="Theme.CSD230FinalProject.AppBarOverlay"
         parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+<!--    <style name="Theme.DroidCafe.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.DroidCafe.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.DroidCafe.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 </resources>

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-       // setSupportActionBar(binding.toolbar);
+       setSupportActionBar(binding.toolbar);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.thecocktaildb.com/api/json/v1/1/")
@@ -144,13 +144,23 @@ public class MainActivity extends AppCompatActivity {
        Drink dr = data.get(0);
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.rootView, DetailFragment.newInstance(dr))
+                .replace(R.id.fragmentContainerView, DetailFragment.newInstance(dr))
                 .commit();
+
+/*        getSupportFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.rootView, DetailFragment.newInstance(dr))
+                .commit();*/
     }
     private void setData(ArrayList<Drink> data){
+
+
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.rootView, MainFragment.newInstance(alDrinks))
+                .add(R.id.fragmentContainerView, MainFragment.newInstance(alDrinks))
                 .commit();
+ /*       getSupportFragmentManager().beginTransaction()
+                .add(R.id.rootView, MainFragment.newInstance(alDrinks))
+                .commit();*/
     }
 
     @Override

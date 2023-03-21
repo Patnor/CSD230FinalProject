@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.csd230finalproject.databinding.FragmentDetailBinding;
+import com.squareup.picasso.Picasso;
 
 
 public class DetailFragment extends Fragment {
@@ -62,7 +65,57 @@ public class DetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Cocktail Details");
 
+
+        // load photo and title
+        Picasso.get().load(mDrink.getStrDrinkThumb()).into(binding.cardImage);
         binding.cardTitle.setText(String.valueOf(mDrink.getStrDrink()));
+
+
+        // load directions
+        TextView tv_directions = binding.cardViewDirections.findViewById(R.id.tv_directions_body);
+        tv_directions.setText(mDrink.getStrInstructions());
+
+        // load ingredients
+
+        TextView tvm1 =  binding.cardViewIngredient.findViewById(R.id.tv_measure1);
+        tvm1.setText(mDrink.getStrMeasure1());
+        TextView tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient1);
+        tvI1.setText(mDrink.getStrIngredient1());
+
+        tvm1 =  binding.cardViewIngredient.findViewById(R.id.tv_measure2);
+        tvm1.setText(mDrink.getStrMeasure2());
+        tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient2);
+        tvI1.setText(mDrink.getStrIngredient2());
+
+        tvm1 =  binding.cardViewIngredient.findViewById(R.id.tv_measure3);
+        tvm1.setText(mDrink.getStrMeasure3());
+        tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient3);
+        tvI1.setText(mDrink.getStrIngredient3());
+
+        tvm1 =  binding.cardViewIngredient.findViewById(R.id.tv_measure4);
+        tvm1.setText(mDrink.getStrMeasure4());
+        tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient4);
+        tvI1.setText(mDrink.getStrIngredient4());
+
+        tvm1 =  binding.cardViewIngredient.findViewById(R.id.tv_measure5);
+        tvm1.setText(mDrink.getStrMeasure5());
+        tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient5);
+        tvI1.setText(mDrink.getStrIngredient5());
+
+        tvm1 =  binding.cardViewIngredient.findViewById(R.id.tv_measure6);
+        tvm1.setText(mDrink.getStrMeasure6());
+        tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient6);
+        tvI1.setText(mDrink.getStrIngredient6());
+
+        tvm1 =  binding.cardViewIngredient.findViewById(R.id.tv_measure7);
+        tvm1.setText(mDrink.getStrMeasure7());
+        tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient7);
+        tvI1.setText(mDrink.getStrIngredient7());
+
+        tvm1 =  binding.cardViewIngredient.findViewById(R.id.tv_measure8);
+        tvm1.setText(mDrink.getStrMeasure8());
+        tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient8);
+        tvI1.setText(mDrink.getStrIngredient8());
     }
 
 }
