@@ -1,6 +1,7 @@
 package com.example.csd230finalproject;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
@@ -12,22 +13,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.csd230finalproject.databinding.ActivityMainBinding;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Drink> oneDrink;
     Drink mDrink;
 
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    Toolbar toolbar;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +52,45 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-       setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.toolbar);
+
+        drawerLayout = binding.rootView;
+        navigationView = binding.navigationView;
+        toolbar = binding.toolbar;
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.menu_open, R.string.menu_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+
+            switch (item.getItemId()) {
+                case R.id.nav_home:
+                    getSupportFragmentManager().popBackStack();
+                    Log.d("MENU_DRAWER_TAG", "Home Item is clicked");
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.nav_search_name:
+                    Log.d("MENU_DRAWER_TAG", "search name  Item is clicked");
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.nav_search_ingred:
+                    Log.d("MENU_DRAWER_TAG", "Search Ingredient Item is clicked");
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.nav_about:
+                    Log.d("MENU_DRAWER_TAG", "about Item is clicked");
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.nav_share:
+                    Log.d("MENU_DRAWER_TAG", "Share Item is clicked");
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+            }
+            return true;
+        });
+
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.thecocktaildb.com/api/json/v1/1/")
@@ -60,10 +102,11 @@ public class MainActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<DrinkList>() {
             @Override
-            public void onResponse(Call<DrinkList> call, Response<DrinkList> response) {
+            public void onResponse(@NonNull Call<DrinkList> call, @NonNull Response<DrinkList> response) {
 
                 //Log.d("drink", "on response");
                 DrinkList myList = response.body();
+                assert myList != null;
                 List<Drink> drinks = myList.getMyDrinks();
                 alDrinks = new ArrayList<>(drinks.size());
                 alDrinks.addAll(drinks);
@@ -72,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<DrinkList> call, Throwable t) {
+            public void onFailure(@NonNull Call<DrinkList> call, @NonNull Throwable t) {
                 Log.d("Drink ", "In on failure");
             }
         });
@@ -95,7 +138,16 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void getDrinkFromApi(String id){
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void getDrinkFromApi(String id) {
         //
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -105,43 +157,45 @@ public class MainActivity extends AppCompatActivity {
 
         String url = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + id;
         DrinksApi api = retrofit.create(DrinksApi.class);
-      // Call<DrinkList> call = api.getDrinkList();
+        // Call<DrinkList> call = api.getDrinkList();
         Call<DrinkList> call = api.getNextDrink(url);
 
         call.enqueue(new Callback<DrinkList>() {
             @Override
-            public void onResponse(Call<DrinkList> call, Response<DrinkList> response) {
+            public void onResponse(@NonNull Call<DrinkList> call, @NonNull Response<DrinkList> response) {
 
                 Log.d("drink", "on response Detail");
                 DrinkList myList = response.body();
+                assert myList != null;
                 List<Drink> drinks = myList.getMyDrinks();
                 oneDrink = new ArrayList<>(drinks.size());
                 oneDrink.addAll(drinks);
-               // setData(alDrinks);
+                // setData(alDrinks);
                 setDetailData(oneDrink);
 
             }
 
             @Override
-            public void onFailure(Call<DrinkList> call, Throwable t) {
-                if(t instanceof IOException)
+            public void onFailure(@NonNull Call<DrinkList> call, @NonNull Throwable t) {
+                if (t instanceof IOException)
                     Log.d("Drink on fail", "IoException");
 
-                Log.d("Drink on fail" , t.getMessage());
+                Log.d("Drink on fail", t.getMessage());
                 System.out.println("Network Error :: " + t.getLocalizedMessage());
-                 t.printStackTrace();
+                t.printStackTrace();
             }
         });
 
 
     }
-    private void setDetailData(ArrayList<Drink> data){
+
+    private void setDetailData(ArrayList<Drink> data) {
 /*
 
         Drink dr = new Drink();
         dr.setIdDrink(Integer.parseInt(id));
 */
-       Drink dr = data.get(0);
+        Drink dr = data.get(0);
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragmentContainerView, DetailFragment.newInstance(dr))
@@ -152,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.rootView, DetailFragment.newInstance(dr))
                 .commit();*/
     }
-    private void setData(ArrayList<Drink> data){
+
+    private void setData(ArrayList<Drink> data) {
 
 
         getSupportFragmentManager().beginTransaction()
@@ -164,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
