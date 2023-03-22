@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -45,6 +47,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mDrinks =(ArrayList<Drink>) getArguments().getSerializable(ARG_PARAM_DRINK);
 
@@ -66,5 +70,15 @@ public class MainFragment extends Fragment {
         adapter = new DrinksAdapter(getContext(), mDrinks);
         binding.rvDrinks.setLayoutManager(new LinearLayoutManager(getContext()));
          binding.rvDrinks.setAdapter(adapter);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.findItem(R.id.menuEnglish).setVisible(false);
+        menu.findItem(R.id.menuFrench).setVisible(false);
+        menu.findItem(R.id.menuItalian).setVisible(false);
+        menu.findItem(R.id.menuGerman).setVisible(false);
+        menu.findItem(R.id.menuSpanish).setVisible(false);
     }
 }

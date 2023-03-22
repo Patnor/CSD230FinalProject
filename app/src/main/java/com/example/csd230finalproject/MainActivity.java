@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.menuEnglish) {
@@ -184,10 +184,14 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "French", Toast.LENGTH_SHORT).show();
             return true;
         }
+        if(id == R.id.menuSpanish) {
+            Toast.makeText(getApplicationContext(), "French", Toast.LENGTH_SHORT).show();
+            return true;
+        }
 
         Toast.makeText(this, "French", Toast.LENGTH_SHORT).show();
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
 
 

@@ -8,11 +8,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.csd230finalproject.databinding.FragmentDetailBinding;
 import com.squareup.picasso.Picasso;
@@ -27,6 +32,13 @@ public class DetailFragment extends Fragment {
     private String mDrinkId;
     private Drink mDrink;
     private int mId;
+
+
+    Boolean mIT = false;
+    Boolean mEN = false;
+    Boolean mDE = false;
+    Boolean mFR = false;
+    Boolean mES = false;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -46,6 +58,8 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
         if (getArguments() != null) {
             mDrink = (Drink) getArguments().getSerializable(ARG_PARAM_ID);
 
@@ -116,6 +130,79 @@ public class DetailFragment extends Fragment {
         tvm1.setText(mDrink.getStrMeasure8());
         tvI1 = binding.cardViewIngredient.findViewById(R.id.tv_ingredient8);
         tvI1.setText(mDrink.getStrIngredient8());
+
+        Log.d("Drink" , mDrink.getStrInstructionsIT());
+
+        if(mDrink.getStrInstructionsIT() != null){
+            mIT = true;
+        }
+        if(mDrink.getStrInstructionsES() != null){
+           mES = true;
+        }
+        if(mDrink.getStrInstructionsDE() != null){
+            mDE = true;
+        }
+        if(mDrink.getStrInstructionsFR() != null){
+            mFR = true;
+        }
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.findItem(R.id.menuEnglish).setVisible(true);
+        menu.findItem(R.id.menuFrench).setVisible(false);
+        menu.findItem(R.id.menuItalian).setVisible(false);
+        menu.findItem(R.id.menuGerman).setVisible(false);
+        menu.findItem(R.id.menuSpanish).setVisible(false);
+
+        if(mIT)
+            menu.findItem(R.id.menuItalian).setVisible(true);
+        if(mES) {
+            menu.findItem(R.id.menuSpanish).setVisible(true);
+        }
+        if(mFR)
+            menu.findItem(R.id.menuFrench).setVisible(true);
+        if(mDE)
+            menu.findItem(R.id.menuGerman).setVisible(true);
+
+
+        //mMenuIT = menu.findItem(R.id.menuItalian);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.menuEnglish) {
+            TextView tv_directions = binding.cardViewDirections.findViewById(R.id.tv_directions_body);
+            tv_directions.setText(mDrink.getStrInstructions());
+            return true;
+        }
+        if(id == R.id.menuItalian) {
+            // load directions
+            TextView tv_directions = binding.cardViewDirections.findViewById(R.id.tv_directions_body);
+            tv_directions.setText(mDrink.getStrInstructionsIT());
+           // Toast.makeText(getContext(), "Italian", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if(id == R.id.menuFrench) {
+            TextView tv_directions = binding.cardViewDirections.findViewById(R.id.tv_directions_body);
+            tv_directions.setText(mDrink.getStrInstructionsFR());
+            return true;
+        }
+        if(id == R.id.menuSpanish) {
+            TextView tv_directions = binding.cardViewDirections.findViewById(R.id.tv_directions_body);
+            tv_directions.setText(mDrink.getStrInstructionsES());
+            return true;
+        }
+        if(id == R.id.menuGerman) {
+            TextView tv_directions = binding.cardViewDirections.findViewById(R.id.tv_directions_body);
+            tv_directions.setText(mDrink.getStrInstructionsDE());
+            return true;
+        }
+
+       // Toast.makeText(this, "French", Toast.LENGTH_SHORT).show();
+        return super.onOptionsItemSelected(item);
+    }
 }

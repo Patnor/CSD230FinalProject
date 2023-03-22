@@ -24,5 +24,15 @@
         android:icon="@android:drawable/ic_menu_revert"
         android:title="French"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menuGerman"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:title="German"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menuSpanish"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:title="Spanish"
+        app:showAsAction="never" />
 
 </menu>

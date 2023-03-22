@@ -47,12 +47,14 @@ public class DrinksAdapter extends RecyclerView.Adapter<DrinksAdapter.DrinksView
             cardId = itemView.findViewById(R.id.card_id);
             cardTryIt = itemView.findViewById(R.id.card_button_try_it);
 
-            strArrayWords = new String[5];
+            strArrayWords = new String[6];
             strArrayWords[0] = "Try It!";
             strArrayWords[1] = "Show Me!";
             strArrayWords[2] = "Make It!";
             strArrayWords[3] = "Do It!";
             strArrayWords[4] = "Yum!";
+            strArrayWords[5] = "Try It!";
+
         }
     }
 
@@ -82,7 +84,7 @@ public class DrinksAdapter extends RecyclerView.Adapter<DrinksAdapter.DrinksView
         holder.cardId.setText((String.valueOf(data.get(position).getIdDrink())));
 
         int pos = position;
-        int num = rand.nextInt(5);
+        int num = rand.nextInt(6);
         holder.cardTryIt.setText(strArrayWords[num]);
 
         holder.cardTryIt.setOnClickListener(new View.OnClickListener() {
