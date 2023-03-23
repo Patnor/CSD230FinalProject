@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ShareCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -33,17 +39,22 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Query;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchFragment.SearchFragmentListener{
     ActivityMainBinding binding;
     ArrayList<Drink> alDrinks;
     ArrayList<Drink> oneDrink;
+
+
     Drink mDrink;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
+
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +73,38 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+/*
+        dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.fragment_about);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+
+        Button ok = findViewById(R.id.aboutButton);
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+*/
+
+
+
+
+
         navigationView.setNavigationItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
                 case R.id.nav_home:
                     getSupportFragmentManager().popBackStack();
-                    Log.d("MENU_DRAWER_TAG", "Home Item is clicked");
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_search_name:
-                    Log.d("MENU_DRAWER_TAG", "search name  Item is clicked");
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentContainerView, new SearchFragment())
+                            .addToBackStack(null)
+                            .commit();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_search_ingred:
@@ -79,11 +112,22 @@ public class MainActivity extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_about:
-                    Log.d("MENU_DRAWER_TAG", "about Item is clicked");
+                    dialog.show();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_share:
-                    Log.d("MENU_DRAWER_TAG", "Share Item is clicked");
+
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.app_name);
+                    sendIntent.setType("text/plain");
+
+                    Intent shareIntent = Intent.createChooser(sendIntent, "Share");
+                    startActivity(shareIntent);
+
+
+
+
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
             }
@@ -123,7 +167,14 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-message"));
 
+
+
+
+
+
     }
+
+
 
 
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -141,6 +192,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        int id = item.getItemId();
+        if(id == R.id.app_bar_search) {
+            Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -221,10 +277,80 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem item = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint("Name a cocktail");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                sendSearchWord(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return true;
     }
 
-/*    @Override
+    @Override
+    public void sendSearchWord(String searchWord) {
+       // getSupportFragmentManager().popBackStack();
+        searchCocktail(searchWord);
+    }
+
+    private void searchCocktail(String word){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://www.thecocktaildb.com/api/json/v1/1/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        String url = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + word;
+        DrinksApi api = retrofit.create(DrinksApi.class);
+        // Call<DrinkList> call = api.getDrinkList();
+        Call<DrinkList> call = api.getSearchDrink(url);
+
+        call.enqueue(new Callback<DrinkList>() {
+            @Override
+            public void onResponse(@NonNull Call<DrinkList> call, @NonNull Response<DrinkList> response) {
+
+                Log.d("drink", "on response Detail");
+                DrinkList myList = response.body();
+                assert myList != null;
+                List<Drink> drinks = myList.getMyDrinks();
+                oneDrink = new ArrayList<>(drinks.size());
+                oneDrink.addAll(drinks);
+                // setData(alDrinks);
+                setSearchData(oneDrink);
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DrinkList> call, @NonNull Throwable t) {
+                if (t instanceof IOException)
+                    Log.d("Drink on fail", "IoException");
+
+                Log.d("Drink on fail", t.getMessage());
+                System.out.println("Network Error :: " + t.getLocalizedMessage());
+                t.printStackTrace();
+            }
+        });
+    }
+
+    void setSearchData(ArrayList<Drink> data){
+        //Drink dr = data.get(0);
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragmentContainerView,  MainFragment.newInstance(data))
+                .commit();
+
+
+    }
+
+ /*   @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.menuEnglish) {

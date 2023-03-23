@@ -31,4 +31,7 @@ public interface DrinksApi {
 
     @GET
     Call<DrinkList> getNextDrink(@Url String url);
+
+    @GET
+    Call<DrinkList> getSearchDrink(@Url String url);
 }
