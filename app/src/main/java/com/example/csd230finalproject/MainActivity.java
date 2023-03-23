@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -320,11 +321,23 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.Se
                 Log.d("drink", "on response Detail");
                 DrinkList myList = response.body();
                 assert myList != null;
-                List<Drink> drinks = myList.getMyDrinks();
-                oneDrink = new ArrayList<>(drinks.size());
-                oneDrink.addAll(drinks);
-                // setData(alDrinks);
-                setSearchData(oneDrink);
+                if(myList != null) {
+                    List<Drink> drinks = myList.getMyDrinks();
+                    if(drinks != null) {
+                        oneDrink = new ArrayList<>(drinks.size());
+                        oneDrink.addAll(drinks);
+                        // setData(alDrinks);
+                        setSearchData(oneDrink);
+                    }
+                    else{
+                        Toast noToast = new Toast(getApplicationContext());
+                        noToast.setGravity(Gravity.TOP,0,0);
+                        noToast.setText("No cocktails found");
+                        noToast.setDuration(Toast.LENGTH_SHORT);
+                        noToast.show();
+                        //Toast.makeText(getApplicationContext(), "No cocktails found", Toast.LENGTH_SHORT).setGravity(Gravity.TOP,50,50);
+                    }
+                }
 
             }
 
