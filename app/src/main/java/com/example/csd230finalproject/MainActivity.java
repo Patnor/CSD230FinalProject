@@ -24,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.csd230finalproject.databinding.ActivityMainBinding;
@@ -98,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.Se
 
             switch (item.getItemId()) {
                 case R.id.nav_home:
-                    getSupportFragmentManager().popBackStack();
+                    //getSupportFragmentManager().popBackStack();
+                    setData(alDrinks);
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_search_name:
@@ -113,7 +115,10 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.Se
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_about:
-                    //dialog.show();
+                    ///dialog.show();
+                    DialogFragment dialog = new AboutFragment();
+                    dialog.show(getSupportFragmentManager(),"About");
+
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_share:
@@ -125,9 +130,6 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.Se
 
                     Intent shareIntent = Intent.createChooser(sendIntent, "Share");
                     startActivity(shareIntent);
-
-
-
 
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
@@ -168,14 +170,11 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.Se
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-message"));
 
-
-
-
-
-
     }
 
+    private void openDialog(){
 
+    }
 
 
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -268,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.Se
 
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragmentContainerView, MainFragment.newInstance(alDrinks))
+                .add(R.id.fragmentContainerView, MainFragment.newInstance(data))
                 .commit();
  /*       getSupportFragmentManager().beginTransaction()
                 .add(R.id.rootView, MainFragment.newInstance(alDrinks))
@@ -363,29 +362,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.Se
 
     }
 
- /*   @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.menuEnglish) {
-            Toast.makeText(getApplicationContext(), "English", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        if(id == R.id.menuItalian) {
-            Toast.makeText(getApplicationContext(), "Italian", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        if(id == R.id.menuFrench) {
-            Toast.makeText(getApplicationContext(), "French", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        if(id == R.id.menuSpanish) {
-            Toast.makeText(getApplicationContext(), "French", Toast.LENGTH_SHORT).show();
-            return true;
-        }
 
-        Toast.makeText(this, "French", Toast.LENGTH_SHORT).show();
-        return super.onOptionsItemSelected(item);
-    }*/
 }
 
 
