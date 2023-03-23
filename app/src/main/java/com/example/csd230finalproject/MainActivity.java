@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.Se
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_about:
-                    dialog.show();
+                    //dialog.show();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_share:
